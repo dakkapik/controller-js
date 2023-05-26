@@ -94,7 +94,7 @@ function updateStatus() {
       var a = axes[i];
       a.innerHTML = i + ": " + controller.axes[i].toFixed(4);
       a.setAttribute("value", controller.axes[i]);
-      console.log(controller.axes[0])
+      // console.log(controller.axes[0])
     }
   }
   rAF(updateStatus);
