@@ -1,31 +1,34 @@
 let WIDTH =1000
 let HEIGHT = 800
 
-let x = 0;
-let y = 0;
+angle = 0
+speed = 0
 
-let pitch = 0;
-let roll = 0;
-// console.log(controllers[0].axes)
+let dispAng 
+let dispSpe
+
+let sendValues = {
+
+}
 
 function setup() {
-    
-    createCanvas(WIDTH, HEIGHT, WEBGL);
+    dispAng = document.getElementById("angle")
+    dispSpe = document.getElementById("speed")
+    createCanvas(WIDTH, HEIGHT);
     // x = WIDTH *0.5
     // y = HEIGHT *0.5
     angleMode(DEGREES)
+    rectMode(CENTER)
 
 }
   
 function draw() {
     background(220);
-    normalMaterial();
-    translate(x,y,0);
-    rotateX(pitch)
-    rotateY(roll)
-
+    
     push()
-        rect(0,0,50,50,15);
+        translate(WIDTH/2, HEIGHT/2)
+        rotate(angle)
+        rect(0,0,50,50+speed);
         if(controllers[0]){
             update();
         }
@@ -35,15 +38,14 @@ function draw() {
 
 function update () {
     let multi = 5
-    let dx =  (controllers[0].axes[0]) * multi
-    let dy =  (controllers[0].axes[1]) * multi
+    angle =  (controllers[0].axes[0]) * 80
+    speed =  (controllers[0].axes[1]) * 400
+    
+    sendValues.angle = controllers[0].axes[0]
+    sendValues.speed= -controllers[0].axes[1]
 
-    let dPitch =  (controllers[0].axes[2])
-    let dRoll =  (controllers[0].axes[3]) 
+    dispAng.innerText = controllers[0].axes[0]
+    dispSpe.innerText = -controllers[0].axes[1]
 
-    pitch += dPitch;
-    roll += dRoll;
-    x += dx
-    y += dy
-    // console.log(x, y)
+    socket.emit('drive-control', sendValues)
 }
